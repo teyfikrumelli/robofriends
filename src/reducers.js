@@ -1,39 +1,46 @@
-import {
-    CHANGE_SEARCH_FIELD,
-    REQUEST_ROBOTS_PENDING,
-    REQUEST_ROBOTS_SUCCESS,
-    REQUEST_ROBOTS_FAILED
-} from './constants';
+import { CHANGE_SEARCH_FIELD, FETCH_PRODUCTS_PENDING, FETCH_PRODUCTS_SUCCESS, FETCH_PRODUCTS_ERROR } from './action'
 
-const initialStateSearch = {
-    searchField: ''
+const initialState = {
+    searchField: '',
 }
 
-export const searchRobots = (state=initialStateSearch, action={}) => {
-    switch(action.type) {
+export const searchRobots = ( state = initialState , { type, payload } ) => {
+    switch(type) {
         case CHANGE_SEARCH_FIELD:
-            return Object.assign({}, state, {searchField: action.payload})
-        default:
+            return { ...state, 
+                searchField: payload 
+            }
+        default: 
             return state;
     }
 }
 
-const initialStateRobots = {
-    isPending: false,
-    robots: [],
-    error: ''
+const robotInitialState = {
+    pending: false,
+    users: [],
+    error: null
 }
 
-export const requestRobots = (state=initialStateRobots, action={}) => {
+export const getRobotsReducer = ( state = robotInitialState, action ) => {
     switch(action.type) {
-        case REQUEST_ROBOTS_PENDING:
-            return Object.assign({}, state, { isPending: true })
-        case REQUEST_ROBOTS_SUCCESS:
-            return Object.assign({}, state, { robots: action.payload, isPending: false })
-        case REQUEST_ROBOTS_FAILED:
-            return Object.assign({}, state, { error: action.payload, isPending: false })
-        default:
+        case FETCH_PRODUCTS_PENDING: 
+            return {
+                ...state,
+                pending: true
+            }
+        case FETCH_PRODUCTS_SUCCESS:
+            return {
+                ...state,
+                pending: false,
+                users: action.payload
+            }
+        case FETCH_PRODUCTS_ERROR:
+            return {
+                ...state,
+                pending: false,
+                error: action.error
+            }
+        default: 
             return state;
     }
 }
-
